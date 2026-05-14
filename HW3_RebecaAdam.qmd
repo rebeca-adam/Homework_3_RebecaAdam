@@ -14,7 +14,7 @@ library(tidyverse)
 ```{r}
 day = 1:365
 
-pm25 = rnorm(n = 365, mean = 14, sd = 8)
+pm25 = rnorm(n = 365, mean = 19, sd = 10)
 
 pm25 = ifelse(pm25 < 0, 0, pm25)
 
@@ -54,7 +54,38 @@ airquality
 
 #Justification
 
-I used a normal distribution (rnorm) to simulate PM2.5 concentration of 14 ug/m^3 and a standard deviation of 8 to simulate moderate urban air quality conditions with a realistic day-to-day variablility. The EPA defines "good" air quality around >= 12ug/m^3, and this analysis seeks to assess a moderate scenario while producing enough variation to evaluate.
+I used a normal distribution (rnorm) to simulate PM2.5 concentration of 19 ug/m^3 and a standard deviation of 10 to simulate moderate urban air quality conditions with a realistic day-to-day variablility. The Indoor Air Hygiene Institute defines "good" air quality around >= 12ug/m^3, and this analysis seeks to assess a moderate scenario while producing enough variation to evaluate. If levels go above 35ug/m^3 during a 24-hour period, exposure is considered unhealthy
+
+
+## Part 2 - Risk Loop
+
+```{r}
+# Initializing
+current_streak = 0
+max_unhealthy_streak = 0
+```
+
+
+```{r}
+for (i in 1:nrow(airquality)) {
+  if (airquality$pm25[i] < 12) {
+    airquality$risk[i] = "good"
+    current_streak = 0
+  } else if (airquality$pm25[i] <= 35) {
+    airquality$risk[i] = "moderate"
+    current_streak = 0
+  } else {
+    airquality$risk[i] = "unhealthy"
+    current_streak = current_streak + 1
+    if (current_streak > max_unhealthy_streak) {
+      max_unhealthy_streak = current_streak
+    }
+  }
+}
+```
+
+
+
 
 
 
