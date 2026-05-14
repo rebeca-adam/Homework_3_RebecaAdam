@@ -1,7 +1,65 @@
 ---
-title: "Homework 3"
+title: "Homework 3 Air Quality Risk Assessment"
 author: "Rebeca Adam"
 format: html
 editor: visual
 ---
+
+```{r}
+library(tidyverse)
+```
+
+## Part 1: Building the Dataset
+
+```{r}
+day = 1:365
+
+pm25 = rnorm(n = 365, mean = 14, sd = 8)
+
+pm25 = ifelse(pm25 < 0, 0, pm25)
+
+pm25
+
+```
+
+
+```{r}
+season = rep(NA, times = 365)
+
+for (i in 1:365) {
+  if (i <= 90) {
+    season[i] = "winter"
+  } else if (i <= 180) {
+    season[i] = "spring"
+  } else if (i <= 270) {
+    season[i] = "summer"
+  } else {
+    season[i] = "fall"
+  }
+}
+
+season = as.factor(season)
+
+season
+```
+
+
+```{r}
+airquality = data.frame(day = day, pm25 = pm25, season = season)
+
+airquality$risk = NA
+
+airquality
+```
+
+#Justification
+
+I used a normal distribution (rnorm) to simulate PM2.5 concentration of 14 ug/m^3 and a standard deviation of 8 to simulate moderate urban air quality conditions with a realistic day-to-day variablility. The EPA defines "good" air quality around >= 12ug/m^3, and this analysis seeks to assess a moderate scenario while producing enough variation to evaluate.
+
+
+
+
+
+
+
 
