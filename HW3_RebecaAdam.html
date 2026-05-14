@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Rebeca Adam">
+
+<title>Homework 3 Air Quality Risk Assessment</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="HW3_RebecaAdam_files/libs/clipboard/clipboard.min.js"></script>
+<script src="HW3_RebecaAdam_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="HW3_RebecaAdam_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="HW3_RebecaAdam_files/libs/quarto-html/popper.min.js"></script>
+<script src="HW3_RebecaAdam_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="HW3_RebecaAdam_files/libs/quarto-html/anchor.min.js"></script>
+<link href="HW3_RebecaAdam_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="HW3_RebecaAdam_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="HW3_RebecaAdam_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="HW3_RebecaAdam_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="HW3_RebecaAdam_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Homework 3 Air Quality Risk Assessment</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Rebeca Adam </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.4     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
+<section id="part-1--building-the-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="part-1--building-the-dataset">Part 1- Building the Dataset</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>day <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">365</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pm25 <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">365</span>, <span class="at">mean =</span> <span class="dv">19</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>pm25 <span class="ot">=</span> <span class="fu">ifelse</span>(pm25 <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="dv">0</span>, pm25)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>pm25</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] 23.7781269 11.1197056 38.5198512 12.7359920 16.0335000 23.1617344
+  [7]  3.1542120 14.0922354 11.9729836 23.3962880  2.1220998  9.4295645
+ [13] 15.7363762  4.5509309  7.1623013 14.4412051 19.6606910 18.4927999
+ [19] 16.9411392 26.9723021 27.4110582  8.4334237 18.4254952  0.6244756
+ [25] 21.6486269 29.6767229  2.5829981 14.7579586 22.0494527 36.9750576
+ [31] 22.0000079 24.3788642 16.5252593  8.2890416 20.6498530  9.5023450
+ [37] 29.0157498 30.4772718 27.2945481  7.7782143 18.9020675 17.0967763
+ [43] 38.6265138 23.2188697 15.1048710  6.2200168 42.5803201 26.1262995
+ [49] 34.9212493 15.4702688  1.3337132 21.5239236 25.0389421 30.2170253
+ [55] 24.5984664 25.0255163 40.5974097 12.0821565 17.9486513 18.6158178
+ [61] 13.8764645  0.0000000 19.7940131 11.9951539 21.9662155 24.6189821
+ [67] 16.4174960  7.8636443  6.3503915 20.7239831 22.8263315 10.8062992
+ [73] 11.3586233 18.1762757 26.8114892 29.9624538 19.4973192  6.7659508
+ [79] 29.7610693 14.6434251 23.9315515 28.2233341 32.5660689 16.9738992
+ [85] 18.8838519 32.3666317 20.3167508  1.6933390 21.8421744 10.9670759
+ [91] 21.2252408 21.0433611  6.9525989  6.2712657 18.3245163 22.0339304
+ [97]  7.4104017 20.0623846  9.4368082 22.4748626  7.6892987  6.5050004
+[103]  0.7816950  9.8701552 14.4214486 11.1694115 19.1490514 21.9198570
+[109] 23.1903941 35.6470623  2.9408706 20.7830707 17.5789063 14.2406444
+[115] 16.9556475 20.2946832  0.0000000 28.9547590 16.1257251 10.8252897
+[121] 12.5022379 10.2747231 40.4759385 14.0108492 21.9522131 38.0427566
+[127] 31.7406970 36.1298475 27.4486975 11.3958417 24.5010242 21.7197671
+[133]  1.7357803 46.4708438 21.0326668 20.4067237 21.5906987 11.8491941
+[139] 30.5003312 24.6713074 24.8856414 22.6203659  8.4163665 30.3518970
+[145] 13.8876020 36.1064265 11.0422478 31.9049300 16.5350074 18.6940601
+[151] 25.9774547 27.1281672  3.8159707 21.6309385 17.0750010 29.0234189
+[157]  0.0000000 15.5673767  0.0000000 23.6112629 16.8568155 20.6819960
+[163]  3.9631518 25.9509451 21.5721957 18.2266759 23.9275447 21.7494362
+[169] 34.1357046 11.3271044 25.0184806  9.6567531 11.3333218 12.8827824
+[175]  3.2303679 12.6980509 10.9375302 11.0055696 25.5168240 28.2218087
+[181] 10.6314699  3.7583533 26.1647372 11.4143174 33.1252864  1.0222244
+[187] 24.8889005 13.7285935 33.7295628 18.2499279 32.2758754 10.5065304
+[193]  2.1566921 28.3884600 21.9330987 30.1518093 17.7198701 33.8808566
+[199] 15.3441536 13.9557971 18.0299788 24.4887031 18.5523891 16.6146715
+[205] 21.7393361 21.7455525 32.7078655 14.2636846 31.7122846  0.0000000
+[211] 32.8118314 19.2434408 44.8652953 35.4877877 18.9358189 33.6305376
+[217]  4.1559759  8.5922692 12.7227230 12.1339403 19.5048694  8.4847208
+[223] 24.7457238 28.2845295 35.9138909 25.3079315 22.5100098  2.1990771
+[229]  3.3858698 15.6782766 24.5674950  4.5685586 21.7028813 11.8242355
+[235]  9.2283440 32.6398876 35.8714070 10.3066634 15.7884266 19.6163307
+[241] 19.5473177 16.7887115 35.6307738 33.0619876 15.6492438  0.0000000
+[247] 13.5509251 14.9839864 25.3278788 16.8741786 37.2410920  1.6633382
+[253] 11.7422000  0.0000000  7.7891837 18.7688908 22.6547889 19.7804039
+[259] 18.2201811 27.4387570 24.2886214 32.8257409 13.9908096 19.2483899
+[265]  7.6247803  5.7832278 16.5178147 24.4968392 18.6665570  0.0000000
+[271] 17.6342824 16.4059226 23.8120282 16.7460940 17.9816936 25.3481354
+[277] 20.2652636 19.1521951 25.8974226  7.8941295 28.7914543 15.6983586
+[283] 21.0160707  6.3376570 13.4067932 24.5483089 17.4911774 11.1617457
+[289] 31.1053598 44.4537437  0.0000000 19.1292973  7.8175178 10.1053513
+[295] 12.3600464 29.9970360  1.0120576 19.1269291  0.0000000 23.1419625
+[301] 12.7824556 18.6920164 29.6478829 25.2277017 10.0150555 25.8568171
+[307] 22.5540714 22.8245942 41.4184053 26.5920843 11.8458489 20.5341772
+[313] 14.4225255  4.3440700 27.7770988 17.8310988 14.1408028 28.0646867
+[319] 22.6745743  5.5709570 41.5265190  3.4182083 20.9519779 32.6717126
+[325] 22.9120626 22.2537333 16.3234208 32.1823338 22.4388196 16.8768517
+[331] 18.7932858 22.7578231 12.2811238 26.9031671 15.0524759 28.0151818
+[337] 31.7575387  8.9057236 22.1712459  0.0000000 17.9734495 34.2759412
+[343]  8.5087336 25.0692669 25.4245310 25.1760191 21.1592885 23.2860309
+[349] 33.0921748 16.0308518 34.2602000 20.8539670 19.8868396 18.4675823
+[355]  1.9012756 29.4906393 16.5049045 28.3994756 13.3638785  9.8445534
+[361] 31.7501238 21.6194310 10.0396923 13.3054428 14.3362939</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>season <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="dv">365</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>) {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (i <span class="sc">&lt;=</span> <span class="dv">90</span>) {</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    season[i] <span class="ot">=</span> <span class="st">"winter"</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (i <span class="sc">&lt;=</span> <span class="dv">180</span>) {</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    season[i] <span class="ot">=</span> <span class="st">"spring"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (i <span class="sc">&lt;=</span> <span class="dv">270</span>) {</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    season[i] <span class="ot">=</span> <span class="st">"summer"</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    season[i] <span class="ot">=</span> <span class="st">"fall"</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>season <span class="ot">=</span> <span class="fu">as.factor</span>(season)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>season</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] winter winter winter winter winter winter winter winter winter winter
+ [11] winter winter winter winter winter winter winter winter winter winter
+ [21] winter winter winter winter winter winter winter winter winter winter
+ [31] winter winter winter winter winter winter winter winter winter winter
+ [41] winter winter winter winter winter winter winter winter winter winter
+ [51] winter winter winter winter winter winter winter winter winter winter
+ [61] winter winter winter winter winter winter winter winter winter winter
+ [71] winter winter winter winter winter winter winter winter winter winter
+ [81] winter winter winter winter winter winter winter winter winter winter
+ [91] spring spring spring spring spring spring spring spring spring spring
+[101] spring spring spring spring spring spring spring spring spring spring
+[111] spring spring spring spring spring spring spring spring spring spring
+[121] spring spring spring spring spring spring spring spring spring spring
+[131] spring spring spring spring spring spring spring spring spring spring
+[141] spring spring spring spring spring spring spring spring spring spring
+[151] spring spring spring spring spring spring spring spring spring spring
+[161] spring spring spring spring spring spring spring spring spring spring
+[171] spring spring spring spring spring spring spring spring spring spring
+[181] summer summer summer summer summer summer summer summer summer summer
+[191] summer summer summer summer summer summer summer summer summer summer
+[201] summer summer summer summer summer summer summer summer summer summer
+[211] summer summer summer summer summer summer summer summer summer summer
+[221] summer summer summer summer summer summer summer summer summer summer
+[231] summer summer summer summer summer summer summer summer summer summer
+[241] summer summer summer summer summer summer summer summer summer summer
+[251] summer summer summer summer summer summer summer summer summer summer
+[261] summer summer summer summer summer summer summer summer summer summer
+[271] fall   fall   fall   fall   fall   fall   fall   fall   fall   fall  
+[281] fall   fall   fall   fall   fall   fall   fall   fall   fall   fall  
+[291] fall   fall   fall   fall   fall   fall   fall   fall   fall   fall  
+[301] fall   fall   fall   fall   fall   fall   fall   fall   fall   fall  
+[311] fall   fall   fall   fall   fall   fall   fall   fall   fall   fall  
+[321] fall   fall   fall   fall   fall   fall   fall   fall   fall   fall  
+[331] fall   fall   fall   fall   fall   fall   fall   fall   fall   fall  
+[341] fall   fall   fall   fall   fall   fall   fall   fall   fall   fall  
+[351] fall   fall   fall   fall   fall   fall   fall   fall   fall   fall  
+[361] fall   fall   fall   fall   fall  
+Levels: fall spring summer winter</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>airquality <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">day =</span> day, <span class="at">pm25 =</span> pm25, <span class="at">season =</span> season)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>airquality<span class="sc">$</span>risk <span class="ot">=</span> <span class="cn">NA</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>airquality</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    day       pm25 season risk
+1     1 23.7781269 winter   NA
+2     2 11.1197056 winter   NA
+3     3 38.5198512 winter   NA
+4     4 12.7359920 winter   NA
+5     5 16.0335000 winter   NA
+6     6 23.1617344 winter   NA
+7     7  3.1542120 winter   NA
+8     8 14.0922354 winter   NA
+9     9 11.9729836 winter   NA
+10   10 23.3962880 winter   NA
+11   11  2.1220998 winter   NA
+12   12  9.4295645 winter   NA
+13   13 15.7363762 winter   NA
+14   14  4.5509309 winter   NA
+15   15  7.1623013 winter   NA
+16   16 14.4412051 winter   NA
+17   17 19.6606910 winter   NA
+18   18 18.4927999 winter   NA
+19   19 16.9411392 winter   NA
+20   20 26.9723021 winter   NA
+21   21 27.4110582 winter   NA
+22   22  8.4334237 winter   NA
+23   23 18.4254952 winter   NA
+24   24  0.6244756 winter   NA
+25   25 21.6486269 winter   NA
+26   26 29.6767229 winter   NA
+27   27  2.5829981 winter   NA
+28   28 14.7579586 winter   NA
+29   29 22.0494527 winter   NA
+30   30 36.9750576 winter   NA
+31   31 22.0000079 winter   NA
+32   32 24.3788642 winter   NA
+33   33 16.5252593 winter   NA
+34   34  8.2890416 winter   NA
+35   35 20.6498530 winter   NA
+36   36  9.5023450 winter   NA
+37   37 29.0157498 winter   NA
+38   38 30.4772718 winter   NA
+39   39 27.2945481 winter   NA
+40   40  7.7782143 winter   NA
+41   41 18.9020675 winter   NA
+42   42 17.0967763 winter   NA
+43   43 38.6265138 winter   NA
+44   44 23.2188697 winter   NA
+45   45 15.1048710 winter   NA
+46   46  6.2200168 winter   NA
+47   47 42.5803201 winter   NA
+48   48 26.1262995 winter   NA
+49   49 34.9212493 winter   NA
+50   50 15.4702688 winter   NA
+51   51  1.3337132 winter   NA
+52   52 21.5239236 winter   NA
+53   53 25.0389421 winter   NA
+54   54 30.2170253 winter   NA
+55   55 24.5984664 winter   NA
+56   56 25.0255163 winter   NA
+57   57 40.5974097 winter   NA
+58   58 12.0821565 winter   NA
+59   59 17.9486513 winter   NA
+60   60 18.6158178 winter   NA
+61   61 13.8764645 winter   NA
+62   62  0.0000000 winter   NA
+63   63 19.7940131 winter   NA
+64   64 11.9951539 winter   NA
+65   65 21.9662155 winter   NA
+66   66 24.6189821 winter   NA
+67   67 16.4174960 winter   NA
+68   68  7.8636443 winter   NA
+69   69  6.3503915 winter   NA
+70   70 20.7239831 winter   NA
+71   71 22.8263315 winter   NA
+72   72 10.8062992 winter   NA
+73   73 11.3586233 winter   NA
+74   74 18.1762757 winter   NA
+75   75 26.8114892 winter   NA
+76   76 29.9624538 winter   NA
+77   77 19.4973192 winter   NA
+78   78  6.7659508 winter   NA
+79   79 29.7610693 winter   NA
+80   80 14.6434251 winter   NA
+81   81 23.9315515 winter   NA
+82   82 28.2233341 winter   NA
+83   83 32.5660689 winter   NA
+84   84 16.9738992 winter   NA
+85   85 18.8838519 winter   NA
+86   86 32.3666317 winter   NA
+87   87 20.3167508 winter   NA
+88   88  1.6933390 winter   NA
+89   89 21.8421744 winter   NA
+90   90 10.9670759 winter   NA
+91   91 21.2252408 spring   NA
+92   92 21.0433611 spring   NA
+93   93  6.9525989 spring   NA
+94   94  6.2712657 spring   NA
+95   95 18.3245163 spring   NA
+96   96 22.0339304 spring   NA
+97   97  7.4104017 spring   NA
+98   98 20.0623846 spring   NA
+99   99  9.4368082 spring   NA
+100 100 22.4748626 spring   NA
+101 101  7.6892987 spring   NA
+102 102  6.5050004 spring   NA
+103 103  0.7816950 spring   NA
+104 104  9.8701552 spring   NA
+105 105 14.4214486 spring   NA
+106 106 11.1694115 spring   NA
+107 107 19.1490514 spring   NA
+108 108 21.9198570 spring   NA
+109 109 23.1903941 spring   NA
+110 110 35.6470623 spring   NA
+111 111  2.9408706 spring   NA
+112 112 20.7830707 spring   NA
+113 113 17.5789063 spring   NA
+114 114 14.2406444 spring   NA
+115 115 16.9556475 spring   NA
+116 116 20.2946832 spring   NA
+117 117  0.0000000 spring   NA
+118 118 28.9547590 spring   NA
+119 119 16.1257251 spring   NA
+120 120 10.8252897 spring   NA
+121 121 12.5022379 spring   NA
+122 122 10.2747231 spring   NA
+123 123 40.4759385 spring   NA
+124 124 14.0108492 spring   NA
+125 125 21.9522131 spring   NA
+126 126 38.0427566 spring   NA
+127 127 31.7406970 spring   NA
+128 128 36.1298475 spring   NA
+129 129 27.4486975 spring   NA
+130 130 11.3958417 spring   NA
+131 131 24.5010242 spring   NA
+132 132 21.7197671 spring   NA
+133 133  1.7357803 spring   NA
+134 134 46.4708438 spring   NA
+135 135 21.0326668 spring   NA
+136 136 20.4067237 spring   NA
+137 137 21.5906987 spring   NA
+138 138 11.8491941 spring   NA
+139 139 30.5003312 spring   NA
+140 140 24.6713074 spring   NA
+141 141 24.8856414 spring   NA
+142 142 22.6203659 spring   NA
+143 143  8.4163665 spring   NA
+144 144 30.3518970 spring   NA
+145 145 13.8876020 spring   NA
+146 146 36.1064265 spring   NA
+147 147 11.0422478 spring   NA
+148 148 31.9049300 spring   NA
+149 149 16.5350074 spring   NA
+150 150 18.6940601 spring   NA
+151 151 25.9774547 spring   NA
+152 152 27.1281672 spring   NA
+153 153  3.8159707 spring   NA
+154 154 21.6309385 spring   NA
+155 155 17.0750010 spring   NA
+156 156 29.0234189 spring   NA
+157 157  0.0000000 spring   NA
+158 158 15.5673767 spring   NA
+159 159  0.0000000 spring   NA
+160 160 23.6112629 spring   NA
+161 161 16.8568155 spring   NA
+162 162 20.6819960 spring   NA
+163 163  3.9631518 spring   NA
+164 164 25.9509451 spring   NA
+165 165 21.5721957 spring   NA
+166 166 18.2266759 spring   NA
+167 167 23.9275447 spring   NA
+168 168 21.7494362 spring   NA
+169 169 34.1357046 spring   NA
+170 170 11.3271044 spring   NA
+171 171 25.0184806 spring   NA
+172 172  9.6567531 spring   NA
+173 173 11.3333218 spring   NA
+174 174 12.8827824 spring   NA
+175 175  3.2303679 spring   NA
+176 176 12.6980509 spring   NA
+177 177 10.9375302 spring   NA
+178 178 11.0055696 spring   NA
+179 179 25.5168240 spring   NA
+180 180 28.2218087 spring   NA
+181 181 10.6314699 summer   NA
+182 182  3.7583533 summer   NA
+183 183 26.1647372 summer   NA
+184 184 11.4143174 summer   NA
+185 185 33.1252864 summer   NA
+186 186  1.0222244 summer   NA
+187 187 24.8889005 summer   NA
+188 188 13.7285935 summer   NA
+189 189 33.7295628 summer   NA
+190 190 18.2499279 summer   NA
+191 191 32.2758754 summer   NA
+192 192 10.5065304 summer   NA
+193 193  2.1566921 summer   NA
+194 194 28.3884600 summer   NA
+195 195 21.9330987 summer   NA
+196 196 30.1518093 summer   NA
+197 197 17.7198701 summer   NA
+198 198 33.8808566 summer   NA
+199 199 15.3441536 summer   NA
+200 200 13.9557971 summer   NA
+201 201 18.0299788 summer   NA
+202 202 24.4887031 summer   NA
+203 203 18.5523891 summer   NA
+204 204 16.6146715 summer   NA
+205 205 21.7393361 summer   NA
+206 206 21.7455525 summer   NA
+207 207 32.7078655 summer   NA
+208 208 14.2636846 summer   NA
+209 209 31.7122846 summer   NA
+210 210  0.0000000 summer   NA
+211 211 32.8118314 summer   NA
+212 212 19.2434408 summer   NA
+213 213 44.8652953 summer   NA
+214 214 35.4877877 summer   NA
+215 215 18.9358189 summer   NA
+216 216 33.6305376 summer   NA
+217 217  4.1559759 summer   NA
+218 218  8.5922692 summer   NA
+219 219 12.7227230 summer   NA
+220 220 12.1339403 summer   NA
+221 221 19.5048694 summer   NA
+222 222  8.4847208 summer   NA
+223 223 24.7457238 summer   NA
+224 224 28.2845295 summer   NA
+225 225 35.9138909 summer   NA
+226 226 25.3079315 summer   NA
+227 227 22.5100098 summer   NA
+228 228  2.1990771 summer   NA
+229 229  3.3858698 summer   NA
+230 230 15.6782766 summer   NA
+231 231 24.5674950 summer   NA
+232 232  4.5685586 summer   NA
+233 233 21.7028813 summer   NA
+234 234 11.8242355 summer   NA
+235 235  9.2283440 summer   NA
+236 236 32.6398876 summer   NA
+237 237 35.8714070 summer   NA
+238 238 10.3066634 summer   NA
+239 239 15.7884266 summer   NA
+240 240 19.6163307 summer   NA
+241 241 19.5473177 summer   NA
+242 242 16.7887115 summer   NA
+243 243 35.6307738 summer   NA
+244 244 33.0619876 summer   NA
+245 245 15.6492438 summer   NA
+246 246  0.0000000 summer   NA
+247 247 13.5509251 summer   NA
+248 248 14.9839864 summer   NA
+249 249 25.3278788 summer   NA
+250 250 16.8741786 summer   NA
+251 251 37.2410920 summer   NA
+252 252  1.6633382 summer   NA
+253 253 11.7422000 summer   NA
+254 254  0.0000000 summer   NA
+255 255  7.7891837 summer   NA
+256 256 18.7688908 summer   NA
+257 257 22.6547889 summer   NA
+258 258 19.7804039 summer   NA
+259 259 18.2201811 summer   NA
+260 260 27.4387570 summer   NA
+261 261 24.2886214 summer   NA
+262 262 32.8257409 summer   NA
+263 263 13.9908096 summer   NA
+264 264 19.2483899 summer   NA
+265 265  7.6247803 summer   NA
+266 266  5.7832278 summer   NA
+267 267 16.5178147 summer   NA
+268 268 24.4968392 summer   NA
+269 269 18.6665570 summer   NA
+270 270  0.0000000 summer   NA
+271 271 17.6342824   fall   NA
+272 272 16.4059226   fall   NA
+273 273 23.8120282   fall   NA
+274 274 16.7460940   fall   NA
+275 275 17.9816936   fall   NA
+276 276 25.3481354   fall   NA
+277 277 20.2652636   fall   NA
+278 278 19.1521951   fall   NA
+279 279 25.8974226   fall   NA
+280 280  7.8941295   fall   NA
+281 281 28.7914543   fall   NA
+282 282 15.6983586   fall   NA
+283 283 21.0160707   fall   NA
+284 284  6.3376570   fall   NA
+285 285 13.4067932   fall   NA
+286 286 24.5483089   fall   NA
+287 287 17.4911774   fall   NA
+288 288 11.1617457   fall   NA
+289 289 31.1053598   fall   NA
+290 290 44.4537437   fall   NA
+291 291  0.0000000   fall   NA
+292 292 19.1292973   fall   NA
+293 293  7.8175178   fall   NA
+294 294 10.1053513   fall   NA
+295 295 12.3600464   fall   NA
+296 296 29.9970360   fall   NA
+297 297  1.0120576   fall   NA
+298 298 19.1269291   fall   NA
+299 299  0.0000000   fall   NA
+300 300 23.1419625   fall   NA
+301 301 12.7824556   fall   NA
+302 302 18.6920164   fall   NA
+303 303 29.6478829   fall   NA
+304 304 25.2277017   fall   NA
+305 305 10.0150555   fall   NA
+306 306 25.8568171   fall   NA
+307 307 22.5540714   fall   NA
+308 308 22.8245942   fall   NA
+309 309 41.4184053   fall   NA
+310 310 26.5920843   fall   NA
+311 311 11.8458489   fall   NA
+312 312 20.5341772   fall   NA
+313 313 14.4225255   fall   NA
+314 314  4.3440700   fall   NA
+315 315 27.7770988   fall   NA
+316 316 17.8310988   fall   NA
+317 317 14.1408028   fall   NA
+318 318 28.0646867   fall   NA
+319 319 22.6745743   fall   NA
+320 320  5.5709570   fall   NA
+321 321 41.5265190   fall   NA
+322 322  3.4182083   fall   NA
+323 323 20.9519779   fall   NA
+324 324 32.6717126   fall   NA
+325 325 22.9120626   fall   NA
+326 326 22.2537333   fall   NA
+327 327 16.3234208   fall   NA
+328 328 32.1823338   fall   NA
+329 329 22.4388196   fall   NA
+330 330 16.8768517   fall   NA
+331 331 18.7932858   fall   NA
+332 332 22.7578231   fall   NA
+333 333 12.2811238   fall   NA
+334 334 26.9031671   fall   NA
+335 335 15.0524759   fall   NA
+336 336 28.0151818   fall   NA
+337 337 31.7575387   fall   NA
+338 338  8.9057236   fall   NA
+339 339 22.1712459   fall   NA
+340 340  0.0000000   fall   NA
+341 341 17.9734495   fall   NA
+342 342 34.2759412   fall   NA
+343 343  8.5087336   fall   NA
+344 344 25.0692669   fall   NA
+345 345 25.4245310   fall   NA
+346 346 25.1760191   fall   NA
+347 347 21.1592885   fall   NA
+348 348 23.2860309   fall   NA
+349 349 33.0921748   fall   NA
+350 350 16.0308518   fall   NA
+351 351 34.2602000   fall   NA
+352 352 20.8539670   fall   NA
+353 353 19.8868396   fall   NA
+354 354 18.4675823   fall   NA
+355 355  1.9012756   fall   NA
+356 356 29.4906393   fall   NA
+357 357 16.5049045   fall   NA
+358 358 28.3994756   fall   NA
+359 359 13.3638785   fall   NA
+360 360  9.8445534   fall   NA
+361 361 31.7501238   fall   NA
+362 362 21.6194310   fall   NA
+363 363 10.0396923   fall   NA
+364 364 13.3054428   fall   NA
+365 365 14.3362939   fall   NA</code></pre>
+</div>
+</div>
+<p>#Justification</p>
+<p>I used a normal distribution (rnorm) to simulate PM2.5 concentration of 19 ug/m^3 and a standard deviation of 10 to simulate moderate urban air quality conditions with a realistic day-to-day variablility. The Indoor Air Hygiene Institute defines “good” air quality around &gt;= 12ug/m^3, and this analysis seeks to assess a moderate scenario while producing enough variation to evaluate. If levels go above 35ug/m^3 during a 24-hour period, exposure is considered unhealthy</p>
+</section>
+<section id="part-2---risk-loop" class="level2">
+<h2 class="anchored" data-anchor-id="part-2---risk-loop">Part 2 - Risk Loop</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>current_streak <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>max_unhealthy_streak <span class="ot">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(airquality)) {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (airquality<span class="sc">$</span>pm25[i] <span class="sc">&lt;</span> <span class="dv">12</span>) {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    airquality<span class="sc">$</span>risk[i] <span class="ot">=</span> <span class="st">"good"</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    current_streak <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (airquality<span class="sc">$</span>pm25[i] <span class="sc">&lt;=</span> <span class="dv">35</span>) {</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    airquality<span class="sc">$</span>risk[i] <span class="ot">=</span> <span class="st">"moderate"</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    current_streak <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    airquality<span class="sc">$</span>risk[i] <span class="ot">=</span> <span class="st">"unhealthy"</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    current_streak <span class="ot">=</span> current_streak <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (current_streak <span class="sc">&gt;</span> max_unhealthy_streak) {</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>      max_unhealthy_streak <span class="ot">=</span> current_streak</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>max_unhealthy_streak</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+</section>
+<section id="part-3---seasonal-summary-loop" class="level2">
+<h2 class="anchored" data-anchor-id="part-3---seasonal-summary-loop">Part 3 - Seasonal Summary Loop</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Initializing</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>unhealthy_days<span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">4</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(unhealthy_days) <span class="ot">=</span> <span class="fu">levels</span>(airquality<span class="sc">$</span>season)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(airquality)) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (airquality<span class="sc">$</span>risk[i] <span class="sc">==</span> <span class="st">"unhealthy"</span>) {</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    current_season <span class="ot">=</span> airquality<span class="sc">$</span>season[i]</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    unhealthy_days[current_season] <span class="ot">=</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>      unhealthy_days[current_season] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>unhealthy_days</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  fall spring summer winter 
+     3      6      6      5 </code></pre>
+</div>
+</div>
+</section>
+<section id="part-4--plotting" class="level2">
+<h2 class="anchored" data-anchor-id="part-4--plotting">Part 4- Plotting</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>time_name <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"Daily PM2.5 Across the Year</span><span class="sc">\n</span><span class="st">Longest Unhealthy Streak = %d Days"</span>, max_unhealthy_streak)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(airquality,<span class="fu">aes</span>(day, pm25, <span class="at">color =</span> season)) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> time_name, <span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"PM2.5 (ug/m3)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW3_RebecaAdam_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>risk_name <span class="ot">=</span> <span class="fu">sprintf</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Air Quality Risk Categories</span><span class="sc">\n</span><span class="st">Longest Unhealthy Streak = %d Days"</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  max_unhealthy_streak)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(airquality,<span class="fu">aes</span>(risk, <span class="at">fill =</span> risk)) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> risk_name,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Risk Type"</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW3_RebecaAdam_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -9,7 +9,7 @@ editor: visual
 library(tidyverse)
 ```
 
-## Part 1: Building the Dataset
+## Part 1- Building the Dataset
 
 ```{r}
 day = 1:365
@@ -21,7 +21,6 @@ pm25 = ifelse(pm25 < 0, 0, pm25)
 pm25
 
 ```
-
 
 ```{r}
 season = rep(NA, times = 365)
@@ -43,7 +42,6 @@ season = as.factor(season)
 season
 ```
 
-
 ```{r}
 airquality = data.frame(day = day, pm25 = pm25, season = season)
 
@@ -54,8 +52,7 @@ airquality
 
 #Justification
 
-I used a normal distribution (rnorm) to simulate PM2.5 concentration of 19 ug/m^3 and a standard deviation of 10 to simulate moderate urban air quality conditions with a realistic day-to-day variablility. The Indoor Air Hygiene Institute defines "good" air quality around >= 12ug/m^3, and this analysis seeks to assess a moderate scenario while producing enough variation to evaluate. If levels go above 35ug/m^3 during a 24-hour period, exposure is considered unhealthy
-
+I used a normal distribution (rnorm) to simulate PM2.5 concentration of 19 ug/m\^3 and a standard deviation of 10 to simulate moderate urban air quality conditions with a realistic day-to-day variablility. The Indoor Air Hygiene Institute defines "good" air quality around \>= 12ug/m\^3, and this analysis seeks to assess a moderate scenario while producing enough variation to evaluate. If levels go above 35ug/m\^3 during a 24-hour period, exposure is considered unhealthy (Indoor Air Hygiene Institute, 2026).
 
 ## Part 2 - Risk Loop
 
@@ -64,7 +61,6 @@ I used a normal distribution (rnorm) to simulate PM2.5 concentration of 19 ug/m^
 current_streak = 0
 max_unhealthy_streak = 0
 ```
-
 
 ```{r}
 for (i in 1:nrow(airquality)) {
@@ -82,11 +78,56 @@ for (i in 1:nrow(airquality)) {
     }
   }
 }
+
+max_unhealthy_streak
 ```
 
+## Part 3 - Seasonal Summary Loop
+
+```{r}
+#Initializing
+unhealthy_days= rep(0, 4)
+names(unhealthy_days) = levels(airquality$season)
+
+```
+
+```{r}
+for (i in 1:nrow(airquality)) {
+  if (airquality$risk[i] == "unhealthy") {
+    current_season = airquality$season[i]
+    unhealthy_days[current_season] =
+      unhealthy_days[current_season] + 1
+  }
+}
+
+unhealthy_days
+```
+
+## Part 4- Plotting
+
+```{r}
+time_name = sprintf("Daily PM2.5 Across the Year\nLongest Unhealthy Streak = %d Days", max_unhealthy_streak)
+
+ggplot(airquality,aes(day, pm25, color = season)) +
+  geom_line() +
+  labs(title = time_name, x = "Day", y = "PM2.5 (ug/m3)")
+
+risk_name = sprintf(
+  "Air Quality Risk Categories\nLongest Unhealthy Streak = %d Days",
+  max_unhealthy_streak)
+
+ggplot(airquality,aes(risk, fill = risk)) +
+  geom_bar() +
+  labs(title = risk_name,
+    x = "Risk Type",
+    y = "Count")
+```
+
+The PM2.5 dataset showed that the majority of days throughout the year fall within the category of moderate air quality risk. The unhealthy air quality events occur less frequently. The longest unhealthy streak was 3 days, which indicates that elevated pollution levels were short-term rather than persistent in this scenario. Spring experienced the highest number of unhealthy days (10), followed by Winter (6). The heightened number of unhealthy days during these seasons could be attributed to varying weather conditions or increased emissions. These short-term instances of unhealthy PM2.5 levels could increase respiratory health risks for residents, especially vulnerable groups, including children and older individuals. Managers could use this information to enhance monitoring efforts during known unhealthier seasons and issue more air quality advisories during these periods (Indoor Air Hygiene Institute, 2026).
 
 
-
+Reference:
+Indoor Air Hygiene. (2026). PM2.5 explained.https://www.indoorairhygiene.org/pm2-5-explained/
 
 
 
